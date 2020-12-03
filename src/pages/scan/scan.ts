@@ -38,4 +38,24 @@ export class ScanPage {
         }).present();
       })
   }
+
+
+  //Version avec async et await, async devant le nom de la méthode, await permet d'attendre la résolution de la promise. Autrement dit partout ou il y aurait eu un then(), il suffit de faire précéder d'un await
+  /*
+  async scanBarcode() {
+    try{
+      const options: BarcodeScanResult = {
+        prompt: 'Pointer votre caméra vers un code barre',
+        torchOn: false
+      };
+
+      this.result = await this.bcs.scan(options);
+      await this.bcs.scan(options);
+    } catch(err) {
+      console.error(err);
+      this.toastCtrl.create({message: err.message}).present();
+    }
+  }
+  */
+
 }
