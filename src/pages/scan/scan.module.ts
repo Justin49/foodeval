@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
 import { IonicPageModule } from 'ionic-angular';
 import { ScanPage } from './scan';
-import { BarcodeScannerOriginal, BarcodeScannerOptions, BarcodeScanResult} from '@ionic-native/barcode-scanner';
+import { BarcodeScanner } from '@ionic-native/barcode-scanner';
 
 
 @NgModule({
@@ -12,7 +12,7 @@ import { BarcodeScannerOriginal, BarcodeScannerOptions, BarcodeScanResult} from 
     IonicPageModule.forChild(ScanPage),
   ],
   providers: [
-    BarcodeScannerOriginal,
+    BarcodeScanner
   ]
 })
 export class ScanPageModule {}

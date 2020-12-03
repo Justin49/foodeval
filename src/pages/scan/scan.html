@@ -13,4 +13,11 @@
       <ion-icon name="barcode"></ion-icon>
     </button>
   </ion-fab>
+
+  <ion-card *ngIf="result">
+    <ion-card-content>
+      <p>code barre : {{result.text}}</p>
+      <p>format : {{result.format}}</p>
+    </ion-card-content>
+  </ion-card>
 </ion-content>

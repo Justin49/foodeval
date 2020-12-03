@@ -1,6 +1,8 @@
 import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams } from 'ionic-angular';
-import { BarcodeScannerOriginal, BarcodeScannerOptions, BarcodeScanResult } from '@ionic-native/barcode-scanner';
+import { BarcodeScanner, BarcodeScannerOptions, BarcodeScanResult } from '@ionic-native/barcode-scanner';
+import { ToastController } from 'ionic-angular/components/toast/toast-controller';
+
 
 @IonicPage()
 @Component({
@@ -8,30 +10,32 @@ import { BarcodeScannerOriginal, BarcodeScannerOptions, BarcodeScanResult } from
   templateUrl: 'scan.html',
 })
 export class ScanPage {
+  // variable qui va contenir le résultat de la promesse
   result: BarcodeScanResult;
 
-  constructor(public navCtrl: NavController, public navParams: NavParams, private bcs: BarcodeScannerOriginal) {
-  }
 
-  ionViewDidLoad() {
-    console.log('ionViewDidLoad ScanPage');
+  constructor(public navCtrl: NavController, public navParams: NavParams, private bcs: BarcodeScanner, private toastCtrl: ToastController) {
   }
 
   scanBarcode() {
     const options: BarcodeScannerOptions = {
-      // message indiquant à l'utilisateur de pointer sa caméra vers le code-barre du produit qu'il à envie de scanner (android seulement)
-      prompt: 'Pointer votre caméra vers un code-barre',
-      // option pour éclairer la lampe du smartphone ou pas (android seulement)
+      // message transmis à l'utilisateur
+      prompt: 'Pointer votre caméra vers un code barre',
+      // la lumière du smartphone ne s'allume pas
       torchOn: false
     };
 
+    // scan retourne une promesse
     this.bcs.scan(options)
-    // récupère le résultat
+    // une fois que la promesse est résolu, le résultat est disponible
       .then(res => {
         this.result = res;
       })
+      // si la promesse n'est pas résolu, alors on affiche un toast à l'utilisateur
       .catch(err => {
-        // afficher le problème à l'utilisateur
+        this.toastCtrl.create({
+          message: err.message
+        }).present();
       })
   }
 }
