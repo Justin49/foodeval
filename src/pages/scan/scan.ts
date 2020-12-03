@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams } from 'ionic-angular';
 import { BarcodeScanner, BarcodeScannerOptions, BarcodeScanResult } from '@ionic-native/barcode-scanner';
 import { ToastController } from 'ionic-angular/components/toast/toast-controller';
+import { HttpClient } from '@angular/common/http';
 
 
 @IonicPage()
@@ -12,9 +13,13 @@ import { ToastController } from 'ionic-angular/components/toast/toast-controller
 export class ScanPage {
   // variable qui va contenir le résultat de la promesse
   result: BarcodeScanResult;
+  // url de la page ou sont affiché tout les produits (parti qui ne change pas), auquel on concataine le code barre du produit (parti qui change)
+  BASE_URL = 'https://world/openfoodfacts.org/api/v0/product/';
+  // variable de vue qui vont contenir les données passé depuis l'observable auquel on devra s'abonner
+  api_response_raw;
+  api_response;
 
-
-  constructor(public navCtrl: NavController, public navParams: NavParams, private bcs: BarcodeScanner, private toastCtrl: ToastController) {
+  constructor(public navCtrl: NavController, public navParams: NavParams, private bcs: BarcodeScanner, private toastCtrl: ToastController, private http: HttpClient) {
   }
 
   scanBarcode() {
@@ -57,5 +62,30 @@ export class ScanPage {
     }
   }
   */
+
+  // méthode qui va permettre d'obtenir un article à partir de son code barre, code barre que l'on aure récupérer grâce à la méthode scanBarcode, en paramètre de la méthode le code qui aura été récupérer
+  getArticleByBarcode(code: string) {
+    this.http
+    // on concataine l'url et le code
+      .get(`${this.BASE_URL}${code}`)
+      // on s'abonne à l'observable que retourne la méthode, une fois qu'on décide d'appeler nos données (ici data) alors 3 callbacks sont possible avec .subscribe(), le premier appeler en cas de succès, le second appeler en cas d'échec et le 3ème appeler quand le callback n'a plus rien à envoyer
+
+      // le premier callback passera nos data dans une fonction appeler displayResult en cas de succès, le deuxième callback passera nos data dans une fonction appeler handleGetError en cas d'échec
+      .subscribe(data => this.displayResult(data), error => this.handleGetError(error));
+
+  }
+
+  // méthode qui va gérer le callback en cas de succès
+  displayResult(data) {
+    // retourne un observable auquel on s'abonne, on lui passe ces données
+    this.api_response = data;
+    this.api_response_raw = data;
+  }
+
+  // méthode qui va gérer le callback en cas d'échec
+  handleGetError(error) {
+    console.log(error);
+    console.error(error.message);
+  }
 
 }
