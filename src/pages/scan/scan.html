@@ -14,13 +14,30 @@
     </button>
   </ion-fab>
 
+  <!-- Le résultat du scanne ne s'affiche que si la fonction nous retourne bien la promesse et si on souscrit au données -->
   <ion-card *ngIf="result">
     <ion-card-content>
       <p>code barre : {{result.text}}</p>
       <p>format : {{result.format}}</p>
-
-      <!-- Affichage de toute les propriétés de result avec le pipe json et en utilisant l'application avec un device -->
-      {{result | json }}
+      <!-- Au clique du bouton on appelle la méthode qui viendra afficher les informations sur le produit que l'on aura scanner -->
+      <button ion-button (click)="getArticleByBarcode(result.text)">Afficher le détail du produit</button>
     </ion-card-content>
+  </ion-card>
+
+  <!-- Affichage des données qu'on reçoit de l'API -->
+  <ion-card *ngIf="api_response_raw">
+    <img src="{{api_response.product.image_url}}" alt="{{api_response['product']['ingredients_text']}}">
+    <p>{{api_response['product']['ingredients_text_width_allergens_fr']}}</p>
+    <div>
+      {{api_response['product']['ingredients_text_width_allergens_fr']}}
+    </div>
+    <hr>
+    Apports :
+    <ul>
+      <li>glucides {{api_response['product']['nutriments']['carbohydrates_100g']}} % dont sucres {{api_response['product']['nutriments']['sugars_100g']}} %</li>
+      <li>lipides {{api_response['product']['nutriments']['fat_100g']}} % dont acide gras sat. {{api_response['product']['nutriments']['saturated_fat_100g']}} %</li>
+      <li>protéines {{api_response['product']['nutriments']['proteins_100g']}} %</li>
+      <li>fibres {{api_response['product']['nutriments']['fiber_100g']}} %</li>
+    </ul>
   </ion-card>
 </ion-content>
