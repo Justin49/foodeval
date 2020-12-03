@@ -18,6 +18,9 @@
     <ion-card-content>
       <p>code barre : {{result.text}}</p>
       <p>format : {{result.format}}</p>
+
+      <!-- Affichage de toute les propriétés de result avec le pipe json et en utilisant l'application avec un device -->
+      {{result | json }}
     </ion-card-content>
   </ion-card>
 </ion-content>
